@@ -1,0 +1,23 @@
+#:kivy 2.0
+Menu:
+
+<Menu@GridLayout>:
+    rows: 3
+    padding: 20, 20
+    background_normal: ""
+    Label:
+        text: "Bugs Beeps and Blips"
+    Button:
+        text: "Survey"
+        background_color: .12, .84, 1, 1
+    Button:
+        text: "Feedback"
+        background_color: .12, .84, 1, 1
+    
+<CanvasWidget>:
+    canvas:
+        Colour:
+            rgba: .16, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
