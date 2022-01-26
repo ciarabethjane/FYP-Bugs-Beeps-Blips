@@ -1,7 +1,7 @@
 #:kivy 2.0
-Menu:
+MainMenu:
 
-<Menu@GridLayout>:
+<MainMenu@GridLayout>:
     rows: 3
     padding: 20, 20
     background_normal: ""
@@ -10,6 +10,7 @@ Menu:
     Button:
         text: "Survey"
         background_color: .12, .84, 1, 1
+        on_press: root.toSurvey()
     Button:
         text: "Feedback"
         background_color: .12, .84, 1, 1
