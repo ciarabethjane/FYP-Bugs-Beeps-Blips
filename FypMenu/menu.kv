@@ -1,24 +1,55 @@
 #:kivy 2.0
-MainMenu:
+DisplayScreenManager:
+    MainMenuScreen:
+    SettingsScreen:
 
-<MainMenu@GridLayout>:
-    rows: 3
-    padding: 20, 20
-    background_normal: ""
-    Label:
-        text: "Bugs Beeps and Blips"
-    Button:
-        text: "Survey"
-        background_color: .12, .84, 1, 1
-        on_press: root.toSurvey()
-    Button:
-        text: "Feedback"
-        background_color: .12, .84, 1, 1
-    
-<CanvasWidget>:
-    canvas:
-        Colour:
-            rgba: .16, 1, 1, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+<MainMenuScreen>:
+    name: "mainMenuScreen"
+    GridLayout:
+        rows: 3
+        padding: 20, 20
+        background_normal: ""
+        Label:
+            text: "Bugs Beeps and Blips"
+        Button:
+            text: "Survey"
+            background_color: .12, .84, 1, 1
+            on_press: root.toSurvey()
+        Button:
+            text: "Feedback"
+            background_color: .12, .84, 1, 1
+        Button:
+            text: "Settings"
+            background_color: .12, .84, 1, 1
+            on_press: app.root.current = 'settingsScreen'
+
+<SettingsScreen>:
+    name: "settingsScreen"
+    earliest_var : Earliest
+    latest_var : Latest
+
+    GridLayout: 
+        cols: 1
+        pos: 100, 100
+        Label: 
+            text: "Please enter the time range in which you would like to receive Surveys"
+        GridLayout:
+            cols: 2
+            Label: 
+                text: "Earliest: "
+                color: .12, .84, 1,1
+            TextInput: 
+                id : Earliest
+                mutliline: False
+            Label: 
+                text: "Latest: "
+                color: .12, .84, 1,1
+            TextInput: 
+                id: Latest
+                mutliline : False
+        Button: 
+            text: "Submit"
+            on_press: root.submitButton()
+            background_color: .12, .84, 1,1  
+ 
+

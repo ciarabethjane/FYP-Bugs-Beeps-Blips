@@ -5,18 +5,32 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.graphics import Rectangle, Color
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.properties import ObjectProperty
 
-class CanvasWidget(Widget):
-    pass
+class SettingsScreen(Screen):
+    earliest_var = ObjectProperty(None)
+    latest_var = ObjectProperty(None)
 
-class MainMenu(GridLayout):
+    def submitButton(self):
+        print(self.earliest_var.text, self.latest_var.text)
+
+class MainMenuScreen(Screen):
     def toSurvey(self):
         import webbrowser
         webbrowser.open('https://forms.gle/e4di6afpdqwKr2df9')
 
+class DisplayScreenManager(ScreenManager):
+    pass
+
+sm = ScreenManager()
+sm.add_widget(MainMenuScreen(name='mainMenuScreen'))
+sm.add_widget(SettingsScreen(name='settingsScreen'))
+
 class Menu(App):
     def __build__(self):
-        return CanvasWidget()
+        return sm
 
 
 if __name__ == "__main__":
