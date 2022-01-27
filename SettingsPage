@@ -1,0 +1,31 @@
+import kivy
+from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.widget import Widget
+from kivy.graphics import Rectangle, Color
+from kivy.properties import ObjectProperty
+
+class CanvasWidget(Widget):
+    pass 
+
+class SettingsLayout(GridLayout):
+    earliest_var = ObjectProperty(None)
+    latest_var = ObjectProperty(None)
+
+    def submitButton(self):
+
+        print(self.earliest_var.text, self.latest_var.text)
+
+class SettingsApp(App):
+    
+    def __build__(self):
+        return CanvasWidget()
+
+    
+
+
+if __name__ == "__main__":
+    SettingsApp().run()
