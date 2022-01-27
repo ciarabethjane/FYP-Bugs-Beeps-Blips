@@ -1,0 +1,50 @@
+#:kivy 2.0
+SettingsLayout: 
+
+
+<SettingsLayout@GridLayout>
+    earliest_var : Earliest
+    latest_var : Latest
+
+    GridLayout: 
+        cols: 1
+        size: root.width - 200, root.height - 200
+        pos: 100, 100
+
+        Label: 
+            text: "Please enter the time range in which you would like to receive Surveys"
+
+        GridLayout:
+
+            cols: 2
+
+            Label: 
+                text: "Earliest: "
+                color: .12, .84, 1,1
+
+            TextInput: 
+                id : Earliest
+                mutliline: False
+
+            Label: 
+                text: "Latest: "
+                color: .12, .84, 1,1
+
+            TextInput: 
+                id: Latest
+                mutliline : False
+
+        Button: 
+            text: "Submit"
+            on_press: root.submitButton()
+            background_color: .12, .84, 1,1
+
+<CanvasWidget>:
+    canvas:
+        Colour:
+            rgba: .16, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        
