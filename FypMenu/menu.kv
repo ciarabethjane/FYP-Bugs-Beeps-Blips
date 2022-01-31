@@ -2,11 +2,13 @@
 DisplayScreenManager:
     MainMenuScreen:
     SettingsScreen:
+    SurveyScreen:
+    FeedbackScreen:
 
 <MainMenuScreen>:
     name: "mainMenuScreen"
     GridLayout:
-        rows: 3
+        rows: 4
         padding: 20, 20
         background_normal: ""
         Label:
@@ -14,14 +16,24 @@ DisplayScreenManager:
         Button:
             text: "Survey"
             background_color: .12, .84, 1, 1
-            on_press: root.toSurvey()
+            on_press: 
+                root.manager.transition.direction = 'left'
+                app.root.current = 'surveyScreen'
+
         Button:
             text: "Feedback"
             background_color: .12, .84, 1, 1
+            on_press: 
+                root.manager.transition.direction = 'left'
+                app.root.current = 'feedbackScreen'
+            on_release: root.notify("Hello There", "Look at me, I'm a notification!")
+
         Button:
             text: "Settings"
             background_color: .12, .84, 1, 1
-            on_press: app.root.current = 'settingsScreen'
+            on_press: 
+                root.manager.transition.direction = 'left'
+                app.root.current = 'settingsScreen'
 
 <SettingsScreen>:
     name: "settingsScreen"
@@ -30,9 +42,12 @@ DisplayScreenManager:
 
     GridLayout: 
         cols: 1
-        pos: 100, 100
+        size: root.width - 200, root.height - 200
+        padding: 100, 50
+
         Label: 
             text: "Please enter the time range in which you would like to receive Surveys"
+        
         GridLayout:
             cols: 2
             Label: 
@@ -50,6 +65,109 @@ DisplayScreenManager:
         Button: 
             text: "Submit"
             on_press: root.submitButton()
-            background_color: .12, .84, 1,1  
- 
+            background_color: .12, .84, 1,1
+
+        GridLayout: 
+            cols: 4
+            Label: 
+
+            Label:
+
+            Label: 
+
+            Button: 
+                text: "Back"
+                on_press: 
+                    root.manager.transition.direction = 'right'
+                    app.root.current = "mainMenuScreen"
+
+    
+<SurveyScreen>:
+    name: "surveyScreen"
+
+    FloatLayout:
+
+        GridLayout: 
+            rows: 3
+
+            GridLayout: 
+                cols: 1
+                size_hint: None, None
+                size: root.width , root.height*0.2
+                padding: 100,50
+
+                Label: 
+                    text: "UCC Logo here"
+        
+            GridLayout:
+
+                cols: 2
+                size_hint: None, None
+                size: root.width, root.height*0.6
+                padding: 100,50
+
+                Button:
+                    text: "Survey 1"
+                    on_press: root.toSurvey()
+                    background_color: .12, .84, 1,1
+                    
+                
+                Button:
+                    text: "Survey 2"
+                    on_press: root.toSurvey()
+                    background_color: .12, .84, 1,1
+
+                Button:
+                    text: "Survey 3"
+                    on_press: root.toSurvey()
+                    background_color: .12, .84, 1,1
+
+                Button:
+                    text: "Survey 4"
+                    on_press: root.toSurvey()
+                    background_color: .12, .84, 1,1
+
+                Button:
+                    text: "Survey 5"
+                    on_press: root.toSurvey()
+                    background_color: .12, .84, 1,1
+
+                Button:
+                    text: "Survey 6"
+                    on_press: root.toSurvey()
+                    background_color: .12, .84, 1,1
+
+
+            GridLayout: 
+                cols: 5
+                size_hint: None, None
+                size: root.width, root.height* 0.2
+                padding: 100,20
+
+                Label:
+                Label:
+                Label:
+                Label:
+                
+                Button: 
+                    text: "Back"
+                    on_press: 
+                        root.manager.transition.direction = 'right'
+                        app.root.current = "mainMenuScreen"
+
+<FeedbackScreen>
+    name: "feedbackScreen"
+
+    GridLayout: 
+        rows: 2
+
+        Label: 
+            text: "Under Construction"
+
+        Button: 
+            text: "Back"
+            on_press: 
+                root.manager.transition.direction = 'right'
+                app.root.current = "mainMenuScreen"
+
 
