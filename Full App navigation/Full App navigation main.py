@@ -43,6 +43,14 @@ class SurveyScreen(Screen):
 class FeedbackScreen(Screen):
     pass
 
+class InformationScreen(Screen):
+    pass
+
+class OnboardSurveyScreen(Screen):
+    def toSurvey(self):
+        import webbrowser
+        webbrowser.open('https://forms.gle/e4di6afpdqwKr2df9')
+    
 
 class DisplayScreenManager(ScreenManager):
     pass
@@ -52,6 +60,9 @@ sm.add_widget(MainMenuScreen(name='mainMenuScreen'))
 sm.add_widget(SettingsScreen(name='settingsScreen'))
 sm.add_widget(SurveyScreen(name='surveyScreen'))
 sm.add_widget(FeedbackScreen(name='feedbackScreen'))
+sm.add_widget(InformationScreen(name='informationScreen'))
+sm.add_widget(OnboardSurveyScreen(name= 'onboardSurveyScreen'))
+
 
 class Menu(App):
     def __build__(self):
