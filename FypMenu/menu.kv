@@ -1,55 +1,94 @@
 #:kivy 2.0
+#Create a screen manager to use for navigation purposes within the app
 DisplayScreenManager:
     MainMenuScreen:
     SettingsScreen:
     SurveyScreen:
     FeedbackScreen:
+    InformationScreen:
+    OnboardSurveyScreen:
 
+#Creating the main meny screen
 <MainMenuScreen>:
     name: "mainMenuScreen"
-    GridLayout:
-        rows: 4
-        padding: 20, 20
-        background_normal: ""
-        Label:
-            text: "Bugs Beeps and Blips"
-        Button:
-            text: "Survey"
-            background_color: .12, .84, 1, 1
-            on_press: 
-                root.manager.transition.direction = 'left'
-                app.root.current = 'surveyScreen'
+    #What's the reasoning behind a float layout here?
+    FloatLayout:
+        GridLayout:
+            rows: 2
+            GridLayout:
+                size_hint: None, None
+                size: root.width, root.height*0.2
+                #Create a label to display at the top of the page
+                Label:
+                    text: "Bugs Beeps and Blips"
+            GridLayout:
+                cols: 2
+                size_hint: None, None
+                #Why is this * 0.8?
+                size: root.width*0.2, root.height*0.8
+                padding: 20, 20
+                #Create a button for the initial survey participants will take
+                Button:
+                    text: "Initial Survey"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'onboardSurveyScreen'
+                #Create a button for users to select to go to the settings page. 
+                Button:
+                    text: "Settings"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                    root.manager.transition.direction = 'left'
+                    app.root.current = 'settingsScreen'
+            #Why is there another GridLayout here?
+            GridLayout:
+                rows: 3
+                size_hint: None, None
+                size: root.width*0.8, root.height*0.8
+                background_normal: ""
+                padding: 50, 20
+                Button:
+                    text: "Survey"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'surveyScreen'
+                Button:
+                    text: "Feedback"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'feedbackScreen'
+                    #Is this just here for testing purposes?
+                    on_release: 
+                        root.notify("Hello There", "Look at me, I'm a notification!")
+                Button:
+                    text: "Study Information"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'informationScreen'
 
-        Button:
-            text: "Feedback"
-            background_color: .12, .84, 1, 1
-            on_press: 
-                root.manager.transition.direction = 'left'
-                app.root.current = 'feedbackScreen'
-            on_release: root.notify("Hello There", "Look at me, I'm a notification!")
-
-        Button:
-            text: "Settings"
-            background_color: .12, .84, 1, 1
-            on_press: 
-                root.manager.transition.direction = 'left'
-                app.root.current = 'settingsScreen'
-
+        
 <SettingsScreen>:
     name: "settingsScreen"
     earliest_var : Earliest
     latest_var : Latest
-
-    GridLayout: 
-        cols: 1
-        size: root.width - 200, root.height - 200
-        padding: 100, 50
-
-        Label: 
-            text: "Please enter the time range in which you would like to receive Surveys"
-        
+    FloatLayout:
+        GridLayout: 
+            rows: 4
+            GridLayout:
+                cols: 1
+                size_hint: None, None
+                size: root.width, root.height*0.2
+            Label: 
+                text: "Please enter the time range in which you would like to receive Surveys"
         GridLayout:
             cols: 2
+            size_hint: None, None
+            size: root.width, root.height*0.4
+            padding: 100,20
             Label: 
                 text: "Earliest: "
                 color: .12, .84, 1,1
@@ -62,19 +101,23 @@ DisplayScreenManager:
             TextInput: 
                 id: Latest
                 mutliline : False
-        Button: 
-            text: "Submit"
-            on_press: root.submitButton()
-            background_color: .12, .84, 1,1
-
+        GridLayout:
+            rows: 1
+            size_hint: None, None
+            size: root.width, root.height*0.2
+            padding: 100,0
+            Button: 
+                text: "Submit"
+                on_press: root.submitButton()
+                background_color: .12, .84, 1,1
         GridLayout: 
             cols: 4
+            size_hint: None, None
+            size: root.width, root.height*0.2
+            padding: 100,20
             Label: 
-
             Label:
-
             Label: 
-
             Button: 
                 text: "Back"
                 on_press: 
@@ -105,6 +148,13 @@ DisplayScreenManager:
                 size_hint: None, None
                 size: root.width, root.height*0.6
                 padding: 100,50
+                #Why do we have so many empty labels?
+                Label:
+                Button:
+                    text: "Back"
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        app.root.current = 'mainMenuScreen'
 
                 Button:
                     text: "Survey 1"
@@ -143,7 +193,7 @@ DisplayScreenManager:
                 size_hint: None, None
                 size: root.width, root.height* 0.2
                 padding: 100,20
-
+                #Again, why so many empty labels?
                 Label:
                 Label:
                 Label:
@@ -155,7 +205,7 @@ DisplayScreenManager:
                         root.manager.transition.direction = 'right'
                         app.root.current = "mainMenuScreen"
 
-<FeedbackScreen>
+<FeedbackScreen>:
     name: "feedbackScreen"
 
     GridLayout: 
@@ -171,3 +221,89 @@ DisplayScreenManager:
                 app.root.current = "mainMenuScreen"
 
 
+<InformationScreen>:
+    name: "informationScreen"
+
+    FloatLayout: 
+
+    GridLayout: 
+        rows: 2
+
+        GridLayout:
+            rows: 1
+            size_hint: None, None
+            size: root.width, root.height*0.8
+
+            Label: 
+                text: "Lorem ipsum dolor sit amet, \n consectetur adipiscing elit, sed do eiusmod tempor incididunt ut \n labore et dolore magna aliqua. Ut enim ad minim veniam, \n quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n Duis aute irure dolor in reprehenderit in voluptate \n velit esse cillum dolore eu fugiat nulla pariatur.\n Excepteur sint occaecat cupidatat non proident, \n sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+        GridLayout: 
+            cols: 5
+            size_hint: None, None
+            size: root.width, root.height*0.2
+            padding: 100,20
+
+            Label:
+            Label:
+            Label:
+            Label:
+
+            Button: 
+                text: "Back"
+                on_press: 
+                    root.manager.transition.direction = 'right'
+                    app.root.current = "mainMenuScreen"
+
+<OnboardSurveyScreen>:
+    name: "onboardSurveyScreen"
+
+    FloatLayout:
+
+        GridLayout:
+            rows: 4
+
+            GridLayout:
+                rows: 1
+                size_hint: None, None
+                size: root.width, root.height *0.2
+                Label: 
+                    text: "Please complete these initial surveys"
+
+            GridLayout: 
+                rows: 3
+                size_hint: None, None
+                size: root.width, root.height *0.6
+                padding: 100, 0
+
+                Button: 
+                    text: "Personality Questionnaire"
+                    background_color: .12, .84, 1,1
+                    on_press: root.toSurvey()
+
+                Button: 
+                    text: "Stress Questionnaire"
+                    background_color: .12, .84, 1,1
+                    on_press: root.toSurvey()
+                
+                Button:
+                    text: "General Health Questionnaire"
+                    background_color: .12, .84, 1,1
+                    on_press: root.toSurvey()
+
+            GridLayout: 
+
+                cols: 5
+                size_hint: None, None
+                size: root.width, root.height *0.2
+                padding: 100, 20
+
+                Label:
+                Label:
+                Label:
+                Label:
+
+                Button: 
+                    text: "Back"
+                    on_press: 
+                        root.manager.transition.direction = 'right'
+                        app.root.current = "mainMenuScreen"
