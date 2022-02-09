@@ -14,97 +14,76 @@ DisplayScreenManager:
 
 <MainMenuScreen>:
     name: "mainMenuScreen"
+    backgroun_color: 0, 0, 0, 1
     #clock_var: clock
     
 
     FloatLayout:
 
         GridLayout: 
-            rows: 2
+            rows: 3
 
 
             GridLayout: 
-                cols: 2
+                cols: 1
                 size_hint: None, None
                 size: root.width, root.height*0.2
+                padding: 100, 10
 
                 Label:
                     text: "Bugs Beeps and Blips"
-
-                #Button: 
-                    #text: "time"
-                    #on_press: 
-                        #app.showTime(1)
-                        #app.updateTime(1)
-                        #app.setTargetTime(app.time_list)
-                        #app.checkNotification(1)
-                        #app.conituousylyCheck(1)
-                       
-                
-                #Label: 
-                    #id: clock
-                    #text: "00:00"
-
-
-            GridLayout: 
-                cols: 2
-                size_hint: None, None
-                size: root.width, root.height*0.8
-
-                GridLayout:
-                    rows: 3
-                    size_hint: None, None
-                    size: root.width*0.2, root.height*0.8
-                    padding: 20, 20
-
-                    Button: 
-                        text: "Initial Survey"
-                        background_color: .12, .84, 1, 1
-                        on_press: 
-                            root.manager.transition.direction = 'left'
-                            app.root.current = 'onboardSurveyScreen'
-
-                    Button: 
-                        text: "Settings"
-                        background_color: .12, .84, 1, 1
-                        on_press: 
-                            root.manager.transition.direction = 'left'
-                            app.root.current = 'settingsScreen'
-                    Button: 
-                        text: "Notification"
-                        on_press: app.notify("Hello there!", "Look at me! I'm a notification!")
                     
             
-                GridLayout:
-                    rows: 3
-                    size_hint: None, None
-                    size: root.width*0.8, root.height*0.8
-                    background_normal: ""
-                    padding: 50, 20
+            GridLayout:
+                rows: 3
+                size_hint: None, None
+                size: root.width, root.height*0.6
+                background_normal: ""
+                padding: 100, 20
+                
+
+                Button:
+                    text: "Survey"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'altSurveyScreen'
                     
 
-                    Button:
-                        text: "Survey"
-                        background_color: .12, .84, 1, 1
-                        on_press: 
-                            root.manager.transition.direction = 'left'
-                            app.root.current = 'altSurveyScreen'
-                        
-
-                    Button:
-                        text: "Feedback"
-                        background_color: .12, .84, 1, 1
-                        on_press: 
-                            root.manager.transition.direction = 'left'
-                            app.root.current = 'feedbackScreen'
+                Button:
+                    text: "Feedback"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'feedbackScreen'
 
 
-                    Button: 
-                        text: "Study Information"
-                        background_color: .12, .84, 1, 1
-                        on_press: 
-                            root.manager.transition.direction = 'left'
-                            app.root.current = 'informationScreen'
+                Button: 
+                    text: "Study Information"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'informationScreen'
+
+            GridLayout:
+                cols: 2
+                size_hint: None, None
+                size: root.width, root.height*0.2
+                padding: 100, 20
+
+                Button: 
+                    text: "Initial Survey"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'onboardSurveyScreen'
+
+                Button: 
+                    text: "Settings"
+                    background_color: .12, .84, 1, 1
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        app.root.current = 'settingsScreen'
 
 <SettingsScreen>:
     name: "settingsScreen"
@@ -269,7 +248,7 @@ DisplayScreenManager:
                 Button:
                     text: "Click here to start the Survey"
                     on_press: 
-                        #app.toSurvey()
+                        #app.toSurvey('https://forms.gle/e4di6afpdqwKr2df9','https://forms.gle/e4di6afpdqwKr2df9')
                         app.surveyTaken()
                     background_color: .12, .84, 1,1
             
@@ -381,17 +360,17 @@ DisplayScreenManager:
                 Button: 
                     text: "Personality Questionnaire"
                     background_color: .12, .84, 1,1
-                    on_press: app.toSurvey()
+                    on_press: app.toSurvey('https://forms.gle/e4di6afpdqwKr2df9')
 
                 Button: 
                     text: "Stress Questionnaire"
                     background_color: .12, .84, 1,1
-                    on_press: app.toSurvey()
+                    on_press: app.toSurvey('https://forms.gle/e4di6afpdqwKr2df9')
                 
                 Button:
                     text: "General Health Questionnaire"
                     background_color: .12, .84, 1,1
-                    on_press: app.toSurvey()
+                    on_press: app.toSurvey('https://forms.gle/e4di6afpdqwKr2df9')
 
             GridLayout: 
 
