@@ -1,6 +1,6 @@
 from dis import show_code
 from errno import EALREADY
-from turtle import settiltangle, update
+from turtle import color, settiltangle, update
 import kivy
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
@@ -19,13 +19,13 @@ from time import strftime, time
 import random
 
 
+
 #--------------------------------   Global Variables-----------------------------------------------------------------------------
 
 
 
 class SettingsScreen(Screen):
-    #earliest_var = ObjectProperty(None)
-    #latest_var = ObjectProperty(None)
+   
     
     def submitButton(self):
         
@@ -39,9 +39,7 @@ class MainMenuScreen(Screen):
     pass
         
 class SurveyScreen(Screen):
-    def toSurvey(self):
-        import webbrowser
-        webbrowser.open('https://forms.gle/e4di6afpdqwKr2df9')
+  pass
 
 class AltSurveyScreen(Screen):
     pass
@@ -69,11 +67,11 @@ sm.add_widget(AltSurveyScreen(name='altSurveyScreen'))
 
 
 class Menu(App):
-
-    # global variables
     time_list =[]
     #surevy_taken = False
-    survey_number = 0 # number of survey for the day, 6 surveys in total with indeces 0 - 5
+    survey_number = 0
+    times_generated = True
+    day_number = 0
 
     def __build__(self):
 
@@ -87,7 +85,7 @@ class Menu(App):
         self.setTargetTime(self.time_list)
         self.checkNotification(1)
         self.conituousylyCheck(1)
-        print("Survey Number on start: ",self.survey_number)
+        #print("Survey Number on start: ",self.survey_number)
         return super().on_start()
 
     def processVariables (self):
@@ -107,109 +105,135 @@ class Menu(App):
     clock_var = ObjectProperty(None)
     
     def showTime(self,tick):
-            # returns current time in hour:minute:second format as a string
+            
             time_var = datetime.now().strftime("%H:%M:%S")
-            #print(time_var)
             return time_var
             
 
     def updateTime(self, tick):
-        # continuously calls showTime function to update the time variable
         Clock.schedule_interval(self.showTime,1)
 
         
     def notify(self, title, message):
-        # notification
         title = title
         message = message
         kwargs = {'title': title, 'message': message}
 
         notification.notify(**kwargs)
-
     
     def setTargetTime(self,update_list):
-        # returns list of times to be used in triggering notification. hour and minute values are randomly generated and the sorted list is returned
-        # takes parameter of the list, so when calling need to pass in list from the global variable list
+        
         for i in range(6):
-            hour = random.randint(10,20)
-            minute = random.randint(0,59)
+            hour = random.randint(10,20) # random hour value between 10 am and 8 pm, hardcoded for now
+            minute = random.randint(0,59) # random minute value  between 0 and 59
             
             if len(str(minute)) ==2: 
                 time_value = str(hour)+":"+str(minute)+":00"
             else: 
-                time_value = str(hour)+":0"+str(minute)+":00"
-            update_list.append(time_value)
-            update_list.sort()
-            
+                time_value = str(hour)+":0"+str(minute)+":00" # this makes sure that the time is written to the list correctly as "10:01" and not "10:1"
+            update_list.append(time_value) # creates list of the values that have been created
+            update_list.sort() # sorts the list to make sure that they are sorted by time value --> to trigger notifications porperly
+        
         print(update_list)
         return update_list
 
 
-
-
-
-
     def surveyTaken(self):
-        #  !TODO needs to be reset every day --> no need, create list of lists, 1 list for each day, move on to next list on next day
-        # triggered when "Survey" button is pressed. Keeps track of how many surveys are completed
-        # also used when triggering notifications. That#s how the sytem knows to move on to the next time value in the time list
-        if self.survey_number < 5:
-            self.survey_number += 1
-        else: 
-            self.survey_number = 5
-            print("Error: List index out of range") # way of catching errors and making sure the index doesn#t go out of bounds
+        # this si triggered when the Survey button is clicked
+        # what it does:
+        # - updates survey number vairable which is used to determine which time to use to trigger the next survey
+        # - when all 6 surveys of the day are completed, in increases the day variable
+        # - taht tracks which day it is
+        # is it's the weekend (day 5 and 6) then no survey is triggered and at midnight, the day variable is increased
 
         
-        
-        
+        if self.day_number== 5: # Day: saturday, no surveys should be triggered
+            self.survey_number = 0 # reset survey number variable
+            self.time_list = []
+            self.time_list.append("23:59:59") # when this time comes, the check update function will update the day variable instead of triggering a survey, see line 185
+            print(self.time_list)
+            
+        elif self.day_number == 6:# Day: SUnday, no survey triggered
+            self.survey_number = 0
+            self.time_list = []
+            self.time_list.append("23:59:59")
+            print(self.time_list)
+
+        else: # any day that is not a weekend, as in every day where we send out survey
+            # this checks which survey has been taken and increases the survey number variable which
+
+            if self.survey_number < 5: # update survey number until all 6 are complete
+                self.survey_number += 1
+                print("Survey Number: ", self.survey_number) # for testing
+            else: 
+                self.survey_number = 0 # reset survey number for next day (survey number used to access correct time value)
+                self.day_number += 1 # increase day by 1 to keep track of which day of study we're on
+                print("Day: ", self.day_number)
+                self.time_list = [] # reset time list
+                self.setTargetTime(self.time_list) # creating new time list for the next da
+          
+
 
     def checkNotification(self,tick):
-        # checks current time and when time matched the value in the timelist, a notification is triggered
-        time = self.showTime(1)
-        #while self.survey_number < len(self.time_list):
-        if time == self.time_list[self.survey_number]:
-            self.notify("Hello World!","It's Survey Time")
+        #!TODO the app notification probelm could be solved with toast notifications 
+        
+        time = self.showTime(1) # access current time value in hour:minute:second format
+        if self.day_number == 5: # is Saturday: skips to next day without survey being taken
+            if time == self.time_list[0]:
+                self.day_number += 1 
+                print("updated Day: ", self.day_number)
+                self.surveyTaken()
+        elif self.day_number == 6: # if Sunday: skips to next day without survey being taken and reconfiguring a new time list
+            if time == self.time_list[0]:
+                self.day_number += 1
+                print("updated Day: ", self.day_number)
+                self.setTargetTime(self.time_list) # triggers setting time list for Monday
+                
+
+        else: 
+            if time == self.time_list[self.survey_number]: # any other day where surveys are triggeres normally
+                self.notify("Hello World!","It's Survey Time")  # triggers notification
             
-            
 
-
-
-    def conituousylyCheck(self,tick):
-        # continuously calls previous function to make sure it#s checked every second
-        # !TODO ask Laura about changing time interval, as it is it checks every second, could break it
+    def conituousylyCheck(self,tick): # calls previous function once per second --> checks for match between current time and value in time list
         Clock.schedule_interval(self.checkNotification,1)
 
     def snooze(self):
-        # snooze button
-        # updates time value in the list by adding 5 minutes
-        # !TODO need to change to add 5 minutes to current time value, not list time value
-        # !TODO need to make sure that after 3 snoozes, system moves on to next value in time list (meaning survey is not taken)
-
         #print("Survey number: ",self.survey_number)
-        time_value = self.time_list[self.survey_number] # gets value for current survey from time list
-        time_value_list = time_value.split(":") # splits that value into list with 3 values: [hour, minute, second])
+        #time_value = self.time_list[self.survey_number]
+        #time_value_list = time_value.split(":")
+        #print (time_value_list)
+        # this way it takes the time value from the list
+        # the way below adds 5 minutes to current time (because user won't always snooze exactly when notification is given)
+        time = self.showTime(1)
+        time_values = time.split(":")
         
-        hour_value = int(time_value_list[0]) # assigns values from list to variables for updating
-        minute_value = int(time_value_list[1])
-        if minute_value >= 55 and minute_value <= 59 : # this is used to make sure the minute value doesn'z go over 60 and that in that case the hour value is also updated
+        hour_value = int(time_values[0])
+        minute_value = int(time_values[1])
+        if minute_value >= 55 and minute_value <= 59 :
             new_minute_value = minute_value - 55
             new_hour_value = hour_value +1
             new_time_value = str(new_hour_value)+":0"+str(new_minute_value)+":00"
 
-        else: # this is the normal case, just adds 5 minutes to the minute value
+        else: 
             new_minute_value = minute_value + 5
             new_time_value = str(hour_value)+":"+str(new_minute_value)+":00"
         print(self.time_list)
-        self.time_list[self.survey_number] = new_time_value # updates time value in global time list
-        print(self.time_list)
+        self.time_list[self.survey_number] = new_time_value
+        print(self.time_list) # updates time list with new value when the next notification will be sent
         
         
 
     # ------------------------ Surveys -----------------------------------
 
-    def toSurvey(self):
+    def toSurvey(self, survey_link, end_of_day_survey):
+        # !TODO need to add end of day Survey
+
         import webbrowser
-        webbrowser.open('https://forms.gle/e4di6afpdqwKr2df9')
+        if self.survey_number != 6:
+            webbrowser.open(survey_link)
+        else: 
+            webbrowser.open(end_of_day_survey)
         
 
 
